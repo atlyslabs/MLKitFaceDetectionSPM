@@ -1,15 +1,6 @@
 {
   "pins" : [
     {
-      "identity" : "google-toolbox-for-mac",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/google/google-toolbox-for-mac.git",
-      "state" : {
-        "revision" : "01e4def320cd5ccb3562355eb424073f2b6cafb7",
-        "version" : "6.0.0"
-      }
-    },
-    {
       "identity" : "googledatatransport",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/GoogleDataTransport.git",
