@@ -1,6 +1,8 @@
 // swift-tools-version: 6.0
 import PackageDescription
 
+let gtmSources = "ThirdParty/google-toolbox-for-mac/Sources"
+
 let package = Package(
     name: "MLKitFaceDetectionSPM",
     platforms: [
@@ -17,7 +19,6 @@ let package = Package(
         .package(url: "https://github.com/google/gtm-session-fetcher.git", from: "3.5.0"),
         .package(url: "https://github.com/google/GoogleUtilities.git", from: "8.0.0"),
         .package(url: "https://github.com/google/GoogleDataTransport.git", from: "10.0.0"),
-        .package(path: "ThirdParty/google-toolbox-for-mac"),
     ],
     targets: [
         .binaryTarget(
@@ -37,6 +38,35 @@ let package = Package(
             path: "Frameworks/MLKitFaceDetection.xcframework"
         ),
         .target(
+            name: "GTMDefines",
+            path: "\(gtmSources)/Defines",
+            publicHeadersPath: "Public"
+        ),
+        .target(
+            name: "GTMLogger",
+            dependencies: ["GTMDefines"],
+            path: "\(gtmSources)/Logger",
+            exclude: [
+                "BUILD",
+                "GTMLogger+ASL.m",
+                "GTMLoggerRingBufferWriter.m",
+                "Resources",
+            ],
+            publicHeadersPath: "Public/Foundation"
+        ),
+        .target(
+            name: "GTMNSData_zlib",
+            dependencies: ["GTMDefines"],
+            path: "\(gtmSources)/NSData_zlib",
+            exclude: [
+                "BUILD",
+            ],
+            publicHeadersPath: "Public/Foundation",
+            linkerSettings: [
+                .linkedLibrary("z"),
+            ]
+        ),
+        .target(
             name: "MLKitFaceDetectionKit",
             dependencies: [
                 "MLImage",
@@ -47,8 +77,8 @@ let package = Package(
                 .product(name: "GULLogger", package: "GoogleUtilities"),
                 .product(name: "GULUserDefaults", package: "GoogleUtilities"),
                 .product(name: "GoogleDataTransport", package: "GoogleDataTransport"),
-                .product(name: "GTMLogger", package: "google-toolbox-for-mac"),
-                .product(name: "GTMNSData_zlib", package: "google-toolbox-for-mac"),
+                "GTMLogger",
+                "GTMNSData_zlib",
             ],
             path: "Sources/MLKitFaceDetectionKit",
             linkerSettings: [
