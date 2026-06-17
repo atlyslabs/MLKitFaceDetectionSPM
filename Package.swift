@@ -82,7 +82,6 @@ let package = Package(
             ],
             path: "Sources/MLKitFaceDetectionKit",
             linkerSettings: [
-                .unsafeFlags(["-ObjC"]),
                 .linkedLibrary("c++"),
                 .linkedLibrary("dl"),
                 .linkedLibrary("m"),
