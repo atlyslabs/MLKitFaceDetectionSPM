@@ -1,0 +1,59 @@
+name: Bazel
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'AppKit/**'
+      - 'DebugUtils/**'
+      - 'Foundation/**'
+      - 'Resources/**'
+      - 'Sources/**'
+      - 'Tests/**'
+      - 'UnitTesting/**'
+      - 'iPhone/**'
+      - 'BUILD'
+      - 'MODULE.bazel'
+      - '.bazelc'
+      - '.bazelversion'
+      - '.github/workflows/bazel.yml'
+      - 'bazel_support/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'AppKit/**'
+      - 'DebugUtils/**'
+      - 'Foundation/**'
+      - 'Resources/**'
+      - 'Sources/**'
+      - 'Tests/**'
+      - 'UnitTesting/**'
+      - 'iPhone/**'
+      - 'BUILD'
+      - 'MODULE.bazel'
+      - '.bazelc'
+      - '.bazelversion'
+      - '.github/workflows/bazel.yml'
+      - 'bazel_support/**'
+  schedule:
+    # Run the first and fifteenth of every month at 4:10 UTC
+    - cron:  '10 4 1,15 * *'
+  # Also allow manual triggering from the github UX to revalidate things.
+  workflow_dispatch:
+
+jobs:
+  bazel:
+    runs-on: macos-15
+    strategy:
+      fail-fast: false
+      matrix:
+        MODE: ["dbg", "opt"]
+    steps:
+    - uses: actions/checkout@v6
+    - uses: bazel-contrib/setup-bazel@0.18.0
+      with:
+        bazelisk-cache: true
+        repository-cache: true
+    - name: bazel test
+      run:  |
+        bazelisk test --build_tests_only --test_output=errors -c "${{ matrix.MODE }}" --ios_simulator_device='iPhone 15' //...

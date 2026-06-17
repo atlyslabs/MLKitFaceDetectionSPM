@@ -1,4 +1,4 @@
-// swift-tools-version: 5.9
+// swift-tools-version: 6.0
 import PackageDescription
 
 let package = Package(
@@ -17,6 +17,7 @@ let package = Package(
         .package(url: "https://github.com/google/gtm-session-fetcher.git", from: "3.5.0"),
         .package(url: "https://github.com/google/GoogleUtilities.git", from: "8.0.0"),
         .package(url: "https://github.com/google/GoogleDataTransport.git", from: "10.0.0"),
+        .package(path: "ThirdParty/google-toolbox-for-mac"),
     ],
     targets: [
         .binaryTarget(
@@ -36,14 +37,6 @@ let package = Package(
             path: "Frameworks/MLKitFaceDetection.xcframework"
         ),
         .target(
-            name: "GTMLogger",
-            path: "Sources/GTMLogger",
-            publicHeadersPath: "include",
-            cSettings: [
-                .headerSearchPath("include"),
-            ]
-        ),
-        .target(
             name: "MLKitFaceDetectionKit",
             dependencies: [
                 "MLImage",
@@ -54,10 +47,12 @@ let package = Package(
                 .product(name: "GULLogger", package: "GoogleUtilities"),
                 .product(name: "GULUserDefaults", package: "GoogleUtilities"),
                 .product(name: "GoogleDataTransport", package: "GoogleDataTransport"),
-                "GTMLogger",
+                .product(name: "GTMLogger", package: "google-toolbox-for-mac"),
+                .product(name: "GTMNSData_zlib", package: "google-toolbox-for-mac"),
             ],
             path: "Sources/MLKitFaceDetectionKit",
             linkerSettings: [
+                .unsafeFlags(["-ObjC"]),
                 .linkedLibrary("c++"),
                 .linkedLibrary("dl"),
                 .linkedLibrary("m"),

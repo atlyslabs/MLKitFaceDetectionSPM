@@ -1,0 +1,71 @@
+name: Xcode
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'AppKit/**'
+      - 'DebugUtils/**'
+      - 'Foundation/**'
+      - 'Resources/**'
+      - 'Sources/**'
+      - 'Tests/**'
+      - 'UnitTesting/**'
+      - 'iPhone/**'
+      - '.github/workflows/xcode.yml'
+      - '*.xcodeproj/**'
+      - 'XcodeConfig/**'
+      - '!**/BUILD'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'AppKit/**'
+      - 'DebugUtils/**'
+      - 'Foundation/**'
+      - 'Resources/**'
+      - 'Sources/**'
+      - 'Tests/**'
+      - 'UnitTesting/**'
+      - 'iPhone/**'
+      - '.github/workflows/xcode.yml'
+      - '*.xcodeproj/**'
+      - 'XcodeConfig/**'
+      - '!**/BUILD'
+  schedule:
+    # Run the first and fifteenth of every month at 4:15 UTC
+    - cron:  '15 4 1,15 * *'
+  # Also allow manual triggering from the github UX to revalidate things.
+  workflow_dispatch:
+
+jobs:
+  macOS:
+    runs-on: macos-15
+    strategy:
+      fail-fast: false
+      matrix:
+        MODE: ["Debug", "Release"]
+    steps:
+    - uses: actions/checkout@v6
+    - name: Build and Test
+      run:  |
+        xcodebuild \
+            -project GTM.xcodeproj \
+            -scheme GTM \
+            -configuration ${{ matrix.MODE }} \
+            build test
+  iOS:
+    runs-on: macos-15
+    strategy:
+      fail-fast: false
+      matrix:
+        MODE: ["Debug", "Release"]
+    steps:
+    - uses: actions/checkout@v6
+    - name: Build and Test
+      run:  |
+        xcodebuild \
+            -project GTMiPhone.xcodeproj \
+            -scheme GTMiPhone \
+            -configuration ${{ matrix.MODE }} \
+            -destination "platform=iOS Simulator,name=iPhone 16,OS=latest" \
+            build test

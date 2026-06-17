@@ -1,0 +1,9 @@
+module(
+    name = "google_toolbox_for_mac",
+    version = "6.0.0",
+)
+
+# Must come first before the others
+bazel_dep(name = "apple_support", version = "2.2.0", repo_name = "build_bazel_apple_support")
+bazel_dep(name = "rules_apple", version = "4.3.3", repo_name = "build_bazel_rules_apple")
+bazel_dep(name = "rules_cc", version = "0.2.16")

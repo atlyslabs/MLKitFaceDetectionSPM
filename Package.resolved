@@ -1,4 +1,5 @@
 {
+  "originHash" : "f59872839b27c840bef38f7cf9035f67f7cbcfa5b50e29500db8d0edfa90be7a",
   "pins" : [
     {
       "identity" : "googledatatransport",
@@ -46,5 +47,5 @@
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }
